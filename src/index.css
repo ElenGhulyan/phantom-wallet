@@ -1,13 +1,42 @@
-body {
+*{
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.input-sol{
+  padding: 10px 50px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.content{
+
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+button {
+  padding: 10px 50px ;
+  background-color: aqua;
+  border: 2px solid aqua;
+  cursor: pointer;
+}
+
+.walletAddress{
+  width: 100%;
+  max-width: 145px;
+  overflow: hidden;
+  border: 1px solid aqua;
+  padding: 10px 20px;
+  margin: 20px 0;
 }

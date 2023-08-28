@@ -1,16 +1,17 @@
+/*
 import React, { useState, useEffect } from 'react';
-import { PublicKey, Connection, clusterApiUrl } from '@solana/web3.js';
+import { PublicKey, Connection } from '@solana/web3.js';
 
-const WalletIntegration = () => {
-    const [connected, setConnected] = useState(false);
-    const [wallet, setWallet] = useState(null);
+const WalletIntegration2: React.FC = () => {
+    const [connected, setConnected] = useState<boolean>(false);
+    const [wallet, setWallet] = useState<any | null>(null); // Change 'any' to a more specific type if possible
+
     useEffect(() => {
         const establishConnection = async () => {
             try {
                 const rpcUrl = 'https://long-morning-waterfall.solana-mainnet.discover.quiknode.pro/518985538e0ba735bd0b04a49dc59beb9bca4177/'; // Replace with your QuickNode Solana RPC URL
                 const connection = new Connection(rpcUrl, 'confirmed');
 
-                //const connection = new Connection(clusterApiUrl('mainnet-beta'));
                 const walletAvailable = window.solana && window.solana.isPhantom;
 
                 if (walletAvailable) {
@@ -33,7 +34,6 @@ const WalletIntegration = () => {
         establishConnection();
     }, []);
 
-    // Render UI based on wallet connection status
     return (
         <div>
             {connected ? (
@@ -45,4 +45,5 @@ const WalletIntegration = () => {
     );
 };
 
-export default WalletIntegration;
+export default WalletIntegration2;
+*/
