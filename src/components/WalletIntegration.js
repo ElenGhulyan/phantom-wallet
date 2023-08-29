@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { PublicKey, Connection, Transaction, SystemProgram, sendAndConfirmTransaction } from '@solana/web3.js';
+import React, {useEffect, useState} from 'react';
+import {Connection, PublicKey, sendAndConfirmTransaction, SystemProgram, Transaction} from '@solana/web3.js';
+import * as buffer from "buffer";
+
+window.Buffer = buffer.Buffer;
 
 const WalletIntegration = () => {
     const [connected, setConnected] = useState(false);
@@ -18,6 +21,7 @@ const WalletIntegration = () => {
 
                 if (walletAvailable) {
                     const connectedWallet = await window.solana.connect();
+                    console.log(connectedWallet)
                     setWallet(connectedWallet);
 
                     const walletAddress = connectedWallet.publicKey.toString();
@@ -25,7 +29,7 @@ const WalletIntegration = () => {
 
                     const publicKey = new PublicKey(walletAddress);
                     const balance = await connection.getBalance(publicKey);
-                    setBalance(balance);
+                    setBalance(balance / Math.pow(10, 9));
 
                     setConnected(true);
                 }
@@ -38,39 +42,44 @@ const WalletIntegration = () => {
     }, []);
 
     const handleButtonClick = async () => {
+        alert(inputValue + '----' + balanceAmount)
         if (parseFloat(inputValue) > balanceAmount) {
             alert('The amount is not enough.');
             return;
         }
 
         try {
-            const toAddress = '64z9TxqxVXYThA5wLWoMJUynGjeqmM1vPP5NBr9WRjRy'; // Replace with recipient's Solana address
+            if (!wallet) {
+                alert('Wallet is not connected.');
+                return;
+            }
+
+            const toAddress = 'Cdk93KCwM6CiT2N5zziww95CjbBkQvHtATT5zrFPsAhJ'; // Replace with recipient's Solana address
             const lamportsToSend = Math.floor(parseFloat(inputValue) * Math.pow(10, 9));
 
-            console.log(lamportsToSend)
+            // console.log("lamportsToSend", lamportsToSend);
 
             const transaction = new Transaction().add(
-
                 SystemProgram.transfer({
-                    fromPubkey: wallet.publicKey,
+                    fromPubkey: new PublicKey(walletAddress),
                     toPubkey: new PublicKey(toAddress),
                     lamports: lamportsToSend,
                 })
             );
 
-            const blockhash = (await connection.getRecentBlockhash()).blockhash;
-            transaction.recentBlockhash = blockhash;
+            transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
             transaction.sign(wallet);
 
-            const signature = await sendAndConfirmTransaction(connection, transaction, [wallet]);
+            const signature = await sendAndConfirmTransaction(connection, transaction, [wallet.publicKey]);
+            console.log('Transaction signature:', signature);
 
-            console.log('Transaction Signature:', signature);
-            alert('bbb')
+            alert('Transaction successful');
         } catch (error) {
             console.error('Error transferring SOL:', error);
-            alert('sss')
+            alert('Error transferring SOL');
         }
     };
+
 
     return (
         <div>
@@ -80,7 +89,7 @@ const WalletIntegration = () => {
                         <p>{walletAddress}</p>
                     </div>
 
-                    <p>Connected to Phantom Wallet Balance: {balanceAmount / Math.pow(10, 9)}</p>
+                    <p>Connected to Phantom Wallet ddd Balance: {balanceAmount}</p>
 
                     <div>
                         <input
