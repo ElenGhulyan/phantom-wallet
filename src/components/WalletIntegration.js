@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Connection, PublicKey, sendAndConfirmTransaction, SystemProgram, Transaction} from '@solana/web3.js';
 import * as buffer from "buffer";
+import {getWallet} from "../phantomWallet";
 
 window.Buffer = buffer.Buffer;
 
@@ -25,6 +26,8 @@ const WalletIntegration = () => {
                     setWallet(connectedWallet);
 
                     const walletAddress = connectedWallet.publicKey.toString();
+
+                    console.log( walletAddress + '  55555')
                     setWalletAddress(walletAddress);
 
                     const publicKey = new PublicKey(walletAddress);
@@ -54,32 +57,35 @@ const WalletIntegration = () => {
                 return;
             }
 
-            const toAddress = 'Cdk93KCwM6CiT2N5zziww95CjbBkQvHtATT5zrFPsAhJ'; // Replace with recipient's Solana address
+            const toAddress = '64z9TxqxVXYThA5wLWoMJUynGjeqmM1vPP5NBr9WRjRy';
             const lamportsToSend = Math.floor(parseFloat(inputValue) * Math.pow(10, 9));
+            const w = getWallet();
 
-            // console.log("lamportsToSend", lamportsToSend);
 
             const transaction = new Transaction().add(
                 SystemProgram.transfer({
-                    fromPubkey: new PublicKey(walletAddress),
+                    fromPubkey:w.publicKey,
                     toPubkey: new PublicKey(toAddress),
                     lamports: lamportsToSend,
                 })
             );
 
+            console.log('qweqweqweqweqweqwe',w)
             transaction.recentBlockhash = (await connection.getRecentBlockhash()).blockhash;
-            transaction.sign(wallet);
+            transaction.feePayer =w.publicKey;
 
-            const signature = await sendAndConfirmTransaction(connection, transaction, [wallet.publicKey]);
+            const sign = await  w.signAndSendTransaction(transaction,{skipPreflight:false})
+
+            return
+
+            wallet.signAndSendTransaction()
+            const signature = await sendAndConfirmTransaction(connection,[wallet.publicKey]);
             console.log('Transaction signature:', signature);
 
-            alert('Transaction successful');
         } catch (error) {
             console.error('Error transferring SOL:', error);
-            alert('Error transferring SOL');
         }
     };
-
 
     return (
         <div>
